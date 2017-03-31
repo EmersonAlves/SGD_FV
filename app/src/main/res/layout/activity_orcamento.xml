@@ -9,13 +9,13 @@
     <AutoCompleteTextView
         android:layout_marginTop="42dp"
         android:id="@+id/autoCliente"
-        android:layout_width="333dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         app:layout_constraintHorizontal_bias="0.514" />
 
     <TextView
@@ -53,7 +53,7 @@
 
     <EditText
         android:id="@+id/editEndereco"
-        android:layout_width="333dp"
+        android:layout_width="0dp"
         android:layout_height="41dp"
         android:ems="10"
         android:enabled="false"
@@ -62,23 +62,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="122dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.51"
-        tools:layout_editor_absoluteX="19dp" />
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:layout_constraintHorizontal_bias="0.514" />
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="341dp"
+        android:layout_width="0dp"
         android:layout_height="29dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="199dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.531"
-        tools:layout_editor_absoluteX="20dp" />
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
         android:id="@+id/btnItens"
