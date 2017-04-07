@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".MainOrcamento" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".MainUsuario"></activity>
+        <activity android:name=".MainUsuario" />
+        <activity android:name=".ActivityItem"></activity>
     </application>
 
 </manifest>
