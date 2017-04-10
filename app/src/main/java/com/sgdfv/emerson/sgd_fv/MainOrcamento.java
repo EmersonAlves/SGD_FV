@@ -39,12 +39,12 @@ public class MainOrcamento extends AppCompatActivity {
         etEndereco = (EditText) findViewById(R.id.etEndereco);
         spVendedor = (Spinner) findViewById(R.id.spVendedor);
 
-        actionButton();
+        actionEvent();
         popularCliente();
         popularVendedor();
         selecionaUsuario();
     }
-    public void actionButton(){
+    public void actionEvent(){
         btnProximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +60,14 @@ public class MainOrcamento extends AppCompatActivity {
                     startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(),"Usuario não selecionado",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        atNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus == true && atNome.getText().toString().isEmpty()){
+                    atNome.showDropDown();
                 }
             }
         });
@@ -111,5 +119,15 @@ public class MainOrcamento extends AppCompatActivity {
                 etEndereco.setText(usuarioSelecionado.getEndereco());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        atNome.setText("");
+        etEndereco.setText("");
+        spVendedor.setSelection(0);
+        usuarioSelecionado = null;
+        orcamento = null;
     }
 }

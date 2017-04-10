@@ -31,6 +31,7 @@ public class ActivityItem extends AppCompatActivity {
     private Button btnItem;
     private Button btnFinalizar;
     private EditText etPreco;
+    private EditText etUnidade;
     private EditText etTotal;
     private EditText etQuantidade;
     private EditText etTotalItem;
@@ -54,6 +55,7 @@ public class ActivityItem extends AppCompatActivity {
         btnItem = (Button) findViewById(R.id.btnItem);
         btnFinalizar = (Button) findViewById(R.id.btnFinalizarOrcamento);
         etPreco = (EditText) findViewById(R.id.etPreco);
+        etUnidade = (EditText) findViewById(R.id.etUnidade);
         etTotal = (EditText) findViewById(R.id.etTotal);
         etQuantidade = (EditText) findViewById(R.id.etQuantidade);
         etTotalItem = (EditText) findViewById(R.id.etTotalItem);
@@ -64,11 +66,11 @@ public class ActivityItem extends AppCompatActivity {
         etPreco.setText("0.00");
         etTotal.setText("0.00");
         etTotalItem.setText("0.00");
+        etUnidade.setText("");
 
         popularProduto();
-        actionEvent();
-
         atDescricao.requestFocus();
+        actionEvent();
     }
 
     public void popularProduto() {
@@ -78,11 +80,13 @@ public class ActivityItem extends AppCompatActivity {
         produto1.setIdProduto(1l);
         produto1.setDescricao("Sacola 1");
         produto1.setPreco(2.4);
+        produto1.setUnidade("UN");
 
         Produto produto2 = new Produto();
         produto2.setIdProduto(2l);
         produto2.setDescricao("Sacola 2");
         produto2.setPreco(3.4);
+        produto2.setUnidade("UN");
 
         produtos.add(produto1);
         produtos.add(produto2);
@@ -143,6 +147,7 @@ public class ActivityItem extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 produtoSelecionado = (Produto) parent.getItemAtPosition(position);
+                etUnidade.setText(produtoSelecionado.getUnidade());
                 etPreco.setText(MascaraUtil.setValorCampoMoeda(produtoSelecionado.getPreco()));
                 etPreco.requestFocus();
             }
@@ -187,6 +192,7 @@ public class ActivityItem extends AppCompatActivity {
         etQuantidade.setText("");
         etPreco.setText("0.00");
         etTotalItem.setText("0.00");
+        etUnidade.setText("");
         produtoSelecionado = null;
     }
 
@@ -240,6 +246,7 @@ public class ActivityItem extends AppCompatActivity {
         atDescricao.setText(item.getProduto().getDescricao());
         etQuantidade.setText(String.valueOf(item.getQuantidade()));
         etPreco.setText(MascaraUtil.setValorCampoMoeda(item.getPrecoUnitario()));
+        etUnidade.setText(item.getProduto().getUnidade());
         produtoSelecionado = item.getProduto();
     }
 
