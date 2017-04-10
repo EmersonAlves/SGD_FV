@@ -9,8 +9,8 @@
         android:label="FV Comercial"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainSplash">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        <activity android:name=".MainSplash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
