@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sgdfv.emerson.sgd_fv.db.DBManager;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
@@ -38,6 +39,7 @@ public class ActivityItem extends AppCompatActivity {
 
     private AlertDialog alerta;
 
+    private DBManager dbManager;
     private List<ItemOrcamento> itens;
     private Orcamento orcamento;
     private Produto produtoSelecionado;
@@ -63,6 +65,8 @@ public class ActivityItem extends AppCompatActivity {
         TextView tvNome = (TextView) findViewById(R.id.tvNome);
         tvNome.setText(tvNome.getText().toString()+" "+orcamento.getUsuario().getNome().toUpperCase());
 
+        dbManager = new DBManager(this);
+
         etPreco.setText("0.00");
         etTotal.setText("0.00");
         etTotalItem.setText("0.00");
@@ -75,25 +79,12 @@ public class ActivityItem extends AppCompatActivity {
 
     public void popularProduto() {
         List<Produto> produtos = new ArrayList<>();
-
-        Produto produto1 = new Produto();
-        produto1.setIdProduto(1l);
-        produto1.setDescricao("Sacola 1");
-        produto1.setPreco(2.4);
-        produto1.setUnidade("UN");
-
-        Produto produto2 = new Produto();
-        produto2.setIdProduto(2l);
-        produto2.setDescricao("Sacola 2");
-        produto2.setPreco(3.4);
-        produto2.setUnidade("UN");
-
-        produtos.add(produto1);
-        produtos.add(produto2);
-        ArrayAdapter<Produto> adapter = new ArrayAdapter<Produto>(this, android.R.layout.simple_dropdown_item_1line, produtos);
-        atDescricao.setAdapter(adapter);
-        atDescricao.setThreshold(1);
-
+        produtos.addAll(dbManager.getListaTodosProdutos());
+        if(produtos.size() > 0) {
+            ArrayAdapter<Produto> adapter = new ArrayAdapter<Produto>(this, android.R.layout.simple_dropdown_item_1line, produtos);
+            atDescricao.setAdapter(adapter);
+            atDescricao.setThreshold(1);
+        }
     }
 
     public void actionEvent() {
@@ -181,8 +172,7 @@ public class ActivityItem extends AppCompatActivity {
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"ORCAMENTO FINALIZADO",Toast.LENGTH_LONG).show();
-                finish();
+                finalizarOrcamento();
             }
         });
     }
@@ -250,9 +240,32 @@ public class ActivityItem extends AppCompatActivity {
         produtoSelecionado = item.getProduto();
     }
 
+    public void finalizarOrcamento(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Finalizar Orcamento");
+        builder.setMessage("Deseja finalizar orcamento ?");
+        builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                orcamento.setListaItens(itens);
+                orcamento.setValorTotalOrcamento(MascaraUtil.recuperarValorCampoMoeda(etTotal.getText().toString()));
+                dbManager.inserirOrcamento(orcamento);
+                alerta.dismiss();
+                Toast.makeText(getApplicationContext(),"ORCAMENTO FINALIZADO",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+        builder.setNegativeButton("NAO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                alerta.dismiss();
+            }
+        });
+        alerta = builder.create();
+        alerta.show();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(this, "ORCAMENTO CANCELADO", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "ORCAMENTO CANCELADO", Toast.LENGTH_SHORT).show();
     }
 }

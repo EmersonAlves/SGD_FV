@@ -64,4 +64,8 @@ public class Orcamento implements Serializable{
     public void setListaItens(List<ItemOrcamento> listaItens) {
         this.listaItens = listaItens;
     }
+
+    public String toString(){
+        return idOrcamento+" - "+usuario.getNome();
+    }
 }

@@ -1,10 +1,12 @@
 package com.sgdfv.emerson.sgd_fv.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Emerson on 06/04/2017.
  */
 
-public class Produto {
+public class Produto implements Serializable {
 
     private Long idProduto;
     private String descricao;

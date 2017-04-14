@@ -9,12 +9,15 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     private Button btnOrcamento;
     private Button btnUsuario;
+    private Button btnHistoricoOrcamento;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnOrcamento = (Button) findViewById(R.id.btnOrcamento);
         btnUsuario = (Button) findViewById(R.id.btnUsuario);
+        btnHistoricoOrcamento = (Button) findViewById(R.id.btnListaOrcamentos);
+
         actionButton();
     }
 
@@ -30,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,MainUsuario.class);
+                startActivity(intent);
+            }
+        });
+        btnHistoricoOrcamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ActivityHistorico.class);
                 startActivity(intent);
             }
         });

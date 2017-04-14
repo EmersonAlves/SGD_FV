@@ -10,6 +10,7 @@ public class Usuario implements Serializable {
     private Long idUsuario;
     private String nome;
     private String Endereco;
+    private String tipo;
 
     public Long getIdUsuario() {
         return idUsuario;
@@ -33,6 +34,14 @@ public class Usuario implements Serializable {
 
     public void setEndereco(String endereco) {
         Endereco = endereco;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String toString(){

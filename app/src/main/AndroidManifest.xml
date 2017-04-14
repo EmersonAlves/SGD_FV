@@ -9,18 +9,29 @@
         android:label="FV Comercial"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        <activity android:name=".MainSplash" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".MainSplash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainOrcamento" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainUsuario" />
-        <activity android:name=".ActivityItem"></activity>
+        <activity
+            android:name=".MainOrcamento"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainUsuario"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActivityItem"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ActivityHistorico"></activity>
     </application>
 
 </manifest>

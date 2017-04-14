@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.sgdfv.emerson.sgd_fv.db.DBManager;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Usuario;
 
@@ -24,6 +25,8 @@ public class MainOrcamento extends AppCompatActivity {
     private AutoCompleteTextView atNome;
     private EditText etEndereco;
     private Spinner spVendedor;
+
+    private DBManager dbManager;
 
     private Orcamento orcamento;
     private Usuario usuarioSelecionado;
@@ -39,28 +42,33 @@ public class MainOrcamento extends AppCompatActivity {
         etEndereco = (EditText) findViewById(R.id.etEndereco);
         spVendedor = (Spinner) findViewById(R.id.spVendedor);
 
+        dbManager = new DBManager(this);
+
         actionEvent();
-        popularCliente();
-        popularVendedor();
+        popularComponents();
         selecionaUsuario();
     }
     public void actionEvent(){
         btnProximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(usuarioSelecionado != null) {
-                    orcamento = new Orcamento();
-                    orcamento.setUsuario(usuarioSelecionado);
-                    orcamento.setVendedor(usuarioSelecionado);
-                    orcamento.setDtEmissao(new Date());
-
-                    Intent intent = new Intent(MainOrcamento.this, ActivityItem.class);
-                    intent.putExtra("orcamento",orcamento);
-
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(getApplicationContext(),"Usuario não selecionado",Toast.LENGTH_LONG).show();
+                if(usuarioSelecionado == null) {
+                    Toast.makeText(getApplicationContext(),"Cliente não selecionado",Toast.LENGTH_LONG).show();
+                    return;
                 }
+                if(vendedorSelecionado == null || spVendedor.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getApplicationContext(),"Vendedor não selecionado",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                orcamento = new Orcamento();
+                orcamento.setUsuario(usuarioSelecionado);
+                orcamento.setVendedor(vendedorSelecionado);
+                orcamento.setDtEmissao(new Date());
+
+                Intent intent = new Intent(MainOrcamento.this, ActivityItem.class);
+                intent.putExtra("orcamento",orcamento);
+
+                startActivity(intent);
             }
         });
         atNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -72,43 +80,27 @@ public class MainOrcamento extends AppCompatActivity {
             }
         });
     }
-    public void popularCliente(){
-        List<Usuario> usuarios = new ArrayList<>();
-        Usuario usuario1 = new Usuario();
-        usuario1.setIdUsuario(1l);
-        usuario1.setNome("Antonio");
-        usuario1.setEndereco("Rua Luis N 11");
+    public void popularComponents(){
+        if(dbManager.getListaUsuarios().size() > 0) {
+            List<Usuario> cliente = new ArrayList<>();
+            List<Usuario> vendedor = new ArrayList<>();
+            vendedor.add(null);
+            for (Usuario usuario : dbManager.getListaUsuarios()) {
+                if (usuario.getTipo().equals("FUNCIONARIO")) {
+                    vendedor.add(usuario);
+                } else {
+                    cliente.add(usuario);
+                }
+            }
 
-        Usuario usuario2 = new Usuario();
-        usuario2.setIdUsuario(2l);
-        usuario2.setNome("Jose");
-        usuario2.setEndereco("Rua AAA N 112");
+            ArrayAdapter<Usuario> apadterCliente = new ArrayAdapter<Usuario>(this, android.R.layout.simple_dropdown_item_1line, cliente);
+            ArrayAdapter<Usuario> apadterVendedor = new ArrayAdapter<Usuario>(this, android.R.layout.simple_dropdown_item_1line, vendedor);
 
-        usuarios.add(usuario1);
-        usuarios.add(usuario2);
+            atNome.setAdapter(apadterCliente);
+            atNome.setThreshold(1);
 
-        ArrayAdapter<Usuario> apadter = new ArrayAdapter<Usuario>(this,android.R.layout.simple_dropdown_item_1line,usuarios);
-        atNome.setAdapter(apadter);
-        atNome.setThreshold(1);
-    }
-
-    public void popularVendedor(){
-        List<Usuario> vendedores = new ArrayList<>();
-        Usuario usuario1 = new Usuario();
-        usuario1.setIdUsuario(3l);
-        usuario1.setNome("Ze");
-        usuario1.setEndereco("Rua Luis N 11");
-
-        Usuario usuario2 = new Usuario();
-        usuario2.setIdUsuario(4l);
-        usuario2.setNome("Luiz");
-        usuario2.setEndereco("Rua Luis N 11");
-
-        vendedores.add(usuario1);
-        vendedores.add(usuario2);
-
-        ArrayAdapter<Usuario> adapter = new ArrayAdapter<Usuario>(this,android.R.layout.simple_dropdown_item_1line,vendedores);
-        spVendedor.setAdapter(adapter);
+            spVendedor.setAdapter(apadterVendedor);
+        }
     }
 
     public void selecionaUsuario(){
@@ -117,6 +109,17 @@ public class MainOrcamento extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 usuarioSelecionado = (Usuario) parent.getItemAtPosition(position);
                 etEndereco.setText(usuarioSelecionado.getEndereco());
+            }
+        });
+        spVendedor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                vendedorSelecionado = (Usuario) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

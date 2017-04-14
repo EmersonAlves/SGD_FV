@@ -6,34 +6,6 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="145dp"
-        android:background="#ef9102"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:text="CADASTRAR USUARIO"
-        android:textColor="@android:color/background_light"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:id="@+id/btnOrcamento"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_above="@+id/btnUsuario"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="19dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#ef9102"
-        android:text="CRIAR ORCAMENTO"
-        android:textColor="@android:color/background_light" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -44,4 +16,44 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:id="@+id/btnOrcamento"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ef9102"
+        android:text="CRIAR ORCAMENTO"
+        android:textColor="@android:color/background_light"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="52dp" />
+    <Button
+        android:id="@+id/btnUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ef9102"
+        android:text="CADASTRAR USUARIO"
+        android:textColor="@android:color/background_light"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/btnOrcamento"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btnListaOrcamentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/btnUsuario"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="63dp"
+        android:background="#ef9102"
+        android:text="HISTORICO DE ORCAMENTOS"
+        android:textColor="@android:color/background_light" />
 </RelativeLayout>

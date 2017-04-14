@@ -1,10 +1,12 @@
 package com.sgdfv.emerson.sgd_fv.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Emerson on 09/04/2017.
  */
 
-public class ItemOrcamento {
+public class ItemOrcamento implements Serializable {
 
     private Long idItemOrcamento;
     private Long orcamento;
