@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:focusable="false"
         android:inputType="textPostalAddress"
         android:layout_marginTop="11dp"
         android:layout_below="@+id/textView6"
@@ -82,7 +83,7 @@
             android:id="@+id/btnProximo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#c7c7c7"
+            android:background="#14aef5"
             android:gravity="center"
             android:text="PROXIMO"
             android:textColor="#ffffff" />

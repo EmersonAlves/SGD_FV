@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnOrcamento;
     private Button btnUsuario;
     private Button btnHistoricoOrcamento;
+    private Button btnEstoque;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         btnOrcamento = (Button) findViewById(R.id.btnOrcamento);
         btnUsuario = (Button) findViewById(R.id.btnUsuario);
         btnHistoricoOrcamento = (Button) findViewById(R.id.btnListaOrcamentos);
+        btnEstoque = (Button) findViewById(R.id.btnEstoque);
 
         actionButton();
     }
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,ActivityHistorico.class);
+                startActivity(intent);
+            }
+        });
+        btnEstoque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ActivityEstoque.class);
                 startActivity(intent);
             }
         });

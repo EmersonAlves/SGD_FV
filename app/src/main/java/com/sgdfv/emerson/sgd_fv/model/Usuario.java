@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
     private Long idUsuario;
     private String nome;
-    private String Endereco;
     private String tipo;
 
     public Long getIdUsuario() {
@@ -26,14 +25,6 @@ public class Usuario implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getEndereco() {
-        return Endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        Endereco = endereco;
     }
 
     public String getTipo() {

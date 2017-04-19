@@ -17,6 +17,7 @@ import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Usuario;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class MainOrcamento extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 usuarioSelecionado = (Usuario) parent.getItemAtPosition(position);
-                etEndereco.setText(usuarioSelecionado.getEndereco());
+               // etEndereco.setText(usuarioSelecionado.getEndereco());
             }
         });
         spVendedor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

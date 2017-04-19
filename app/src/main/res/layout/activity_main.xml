@@ -28,7 +28,7 @@
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="52dp" />
+        android:layout_marginTop="30dp" />
     <Button
         android:id="@+id/btnUsuario"
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
         android:textColor="@android:color/background_light"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/btnOrcamento"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -55,5 +55,18 @@
         android:layout_marginTop="63dp"
         android:background="#ef9102"
         android:text="HISTORICO DE ORCAMENTOS"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/btnEstoque"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnListaOrcamentos"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        android:background="#ef9102"
+        android:elevation="0dp"
+        android:text="ESTOQUE DE PRODUTOS"
         android:textColor="@android:color/background_light" />
 </RelativeLayout>

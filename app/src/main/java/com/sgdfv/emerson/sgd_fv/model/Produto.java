@@ -12,6 +12,7 @@ public class Produto implements Serializable {
     private String descricao;
     private double preco;
     private String unidade;
+    private int estoque;
 
     public Long getIdProduto() {
         return idProduto;
@@ -43,6 +44,14 @@ public class Produto implements Serializable {
 
     public void setUnidade(String unidade) {
         this.unidade = unidade;
+    }
+
+    public int getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(int estoque) {
+        this.estoque = estoque;
     }
 
     public String toString(){

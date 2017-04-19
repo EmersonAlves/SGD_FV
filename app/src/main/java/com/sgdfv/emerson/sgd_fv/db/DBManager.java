@@ -31,13 +31,12 @@ public class DBManager {
         ContentValues values = new ContentValues();
         values.put("idusuario",usuario.getIdUsuario());
         values.put("nome",usuario.getNome());
-        values.put("endereco",usuario.getEndereco());
         values.put("tipo",usuario.getTipo());
         db.insert("usuario",null,values);
 
     }
     public List<Usuario> getListaUsuarios(){
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM usuario ORDER BY nome";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
 
@@ -48,8 +47,7 @@ public class DBManager {
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(cursor.getLong(0));
                 usuario.setNome(cursor.getString(1));
-                usuario.setEndereco(cursor.getString(2));
-                usuario.setTipo(cursor.getString(3));
+                usuario.setTipo(cursor.getString(2));
                 usuarios.add(usuario);
             }
         }
@@ -64,8 +62,20 @@ public class DBManager {
             cursor.moveToFirst();
             usuario.setIdUsuario(cursor.getLong(0));
             usuario.setNome(cursor.getString(1));
-            usuario.setEndereco(cursor.getString(2));
-            usuario.setTipo(cursor.getString(3));
+            usuario.setTipo(cursor.getString(2));
+        }
+        return usuario;
+    }
+    public Usuario getUltimoUsuario(){
+        String sql = "SELECT * FROM usuario ORDER BY idusuario DESC LIMIT 1";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+        Usuario usuario = new Usuario();
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            usuario.setIdUsuario(cursor.getLong(0));
+            usuario.setNome(cursor.getString(1));
+            usuario.setTipo(cursor.getString(2));
         }
         return usuario;
     }
@@ -80,7 +90,7 @@ public class DBManager {
         db.insert("produto",null,values);
     }
     public List<Produto> getListaTodosProdutos(){
-        String sql = "SELECT * FROM produto";
+        String sql = "SELECT * FROM produto ORDER BY descricao";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
 
@@ -100,6 +110,22 @@ public class DBManager {
     }
     public Produto getProduto(Long id){
         String sql = "SELECT * FROM produto where idproduto = '"+id+"'";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        Produto produto = new Produto();
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            produto.setIdProduto(cursor.getLong(0));
+            produto.setDescricao(cursor.getString(1));
+            produto.setPreco(cursor.getDouble(2));
+            produto.setUnidade(cursor.getString(3));
+        }
+        return produto;
+    }
+    public Produto getUlitmoProduto(){
+        String sql = "SELECT * FROM produto ORDER BY idproduto DESC LIMIT 1";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
 
