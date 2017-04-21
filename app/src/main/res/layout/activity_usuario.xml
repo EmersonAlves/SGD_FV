@@ -9,17 +9,20 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/rodape">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -29,24 +32,12 @@
                 android:text="Nome do Cliente" />
 
             <EditText
-                android:id="@+id/edtNome"
+                android:id="@+id/etNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
                 android:inputType="textCapCharacters" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tipo Pessoa" />
-
-            <Spinner
-                android:id="@+id/spnTipoPessoa"
-                android:layout_width="209dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -55,26 +46,113 @@
                 android:text="CNPJ/CPF" />
 
             <EditText
-                android:id="@+id/edtCnpfCpf"
+                android:id="@+id/etCnpfCpf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="number"
+                android:maxLength="15" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TELEFONE" />
+
+            <EditText
+                android:id="@+id/etFone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="phone" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#ababab" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Endereco" />
+                android:text="LOGRADOURO" />
+
+            <Spinner
+                android:id="@+id/spLogradouro"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ENDERECO" />
 
             <EditText
-                android:id="@+id/edtEndereco"
+                android:id="@+id/etEndereco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NUMERO" />
+
+            <EditText
+                android:id="@+id/etNumero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CIDADE" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atCidade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BAIRRO" />
+
+            <EditText
+                android:id="@+id/etBairro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textVieww"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="COMPLEMENTO" />
+
+            <EditText
+                android:id="@+id/etComplemento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
         </LinearLayout>
+
     </ScrollView>
     <LinearLayout
         android:id="@+id/rodape"
@@ -89,6 +167,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:background="#00ab30"
+            android:textColor="#fff"
             android:text="SALVAR CLIENTE" />
     </LinearLayout>
 </RelativeLayout>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sgdfv.emerson.sgd_fv.model.Cidade;
+import com.sgdfv.emerson.sgd_fv.model.Endereco;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
@@ -33,7 +35,24 @@ public class DBManager {
         values.put("nome",usuario.getNome());
         values.put("tipo",usuario.getTipo());
         db.insert("usuario",null,values);
-
+    }
+    public void inserirCidade(Cidade cidade){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("codcidade",cidade.getIdCidade());
+        values.put("codigoestado",cidade.getCodigoestado());
+        values.put("nome",cidade.getNome());
+        db.insert("cidade",null,values);
+    }
+    public void inserirEndereco(Endereco endereco){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idendereco",endereco.getIdEndereco());
+        values.put("logradouro",endereco.getLogradouro());
+        values.put("endereco",endereco.getEndereco());
+        values.put("numero",endereco.getNumero());
+        values.put("idusuario",endereco.getIdusuario());
+        db.insert("endereco",null,values);
     }
     public List<Usuario> getListaUsuarios(){
         String sql = "SELECT * FROM usuario ORDER BY nome";
@@ -42,7 +61,7 @@ public class DBManager {
 
         List<Usuario> usuarios = new ArrayList<>();
 
-        if(cursor != null && cursor.moveToFirst()){
+        if(cursor != null){
             while (cursor.moveToNext()){
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(cursor.getLong(0));
@@ -96,7 +115,7 @@ public class DBManager {
 
         List<Produto> produtos = new ArrayList<>();
 
-        if(cursor != null && cursor.moveToFirst()){
+        if(cursor != null){
             while (cursor.moveToNext()){
                 Produto produto = new Produto();
                 produto.setIdProduto(cursor.getLong(0));
@@ -107,6 +126,25 @@ public class DBManager {
             }
         }
         return produtos;
+    }
+
+    public List<Cidade> getListaTodosCidades(){
+        String sql = "SELECT * FROM cidade ORDER BY nome";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        List<Cidade> cidades = new ArrayList<>();
+
+        if(cursor != null){
+            while (cursor.moveToNext()){
+                Cidade cidade = new Cidade();
+                cidade.setIdCidade(cursor.getString(1));
+                cidade.setCodigoestado(cursor.getString(2));
+                cidade.setNome(cursor.getString(3));
+                cidades.add(cidade);
+            }
+        }
+        return cidades;
     }
     public Produto getProduto(Long id){
         String sql = "SELECT * FROM produto where idproduto = '"+id+"'";
@@ -140,29 +178,89 @@ public class DBManager {
         }
         return produto;
     }
+    public Endereco getUlitmoEndereco(){
+        String sql = "SELECT * FROM endereco ORDER BY idendereco DESC LIMIT 1";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        Endereco endereco = new Endereco();
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            endereco.setIdEndereco(cursor.getLong(0));
+            endereco.setLogradouro(cursor.getString(1));
+            endereco.setEndereco(cursor.getString(2));
+            endereco.setNumero(cursor.getString(3));
+            endereco.setIdusuario(cursor.getLong(4));
+        }
+        return endereco;
+    }
+    public Orcamento getOrcamento(){
+        String sql = "SELECT * FROM orcamento ORDER BY idorcamento DESC LIMIT 1";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+        Orcamento orcamento = new Orcamento();
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            orcamento.setListaItens(getItensOrcamento(cursor.getLong(0)));
+            orcamento.setIdOrcamento(cursor.getLong(0));
+            orcamento.setUsuario(getUsuario(cursor.getLong(1)));
+            orcamento.setVendedor(getUsuario(cursor.getLong(2)));
+            orcamento.setValorTotalOrcamento(cursor.getDouble(3));
+            orcamento.setStatus(cursor.getString(4));
+            orcamento.setListaItens(getItensOrcamento(cursor.getLong(0)));
+        }
+        return orcamento;
+    }
+    public int getUlitmoOrcamento(){
+        String sql = "SELECT * FROM orcamento ORDER BY idorcamento DESC LIMIT 1";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        int id = 0;
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+        }
+        return id;
+    }
     public void inserirOrcamento(Orcamento orcamento){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("idusuario",orcamento.getUsuario().getIdUsuario());
         values.put("idvendedor",orcamento.getVendedor().getIdUsuario());
         values.put("valorOrcamento",orcamento.getValorTotalOrcamento());
+        values.put("status",orcamento.getStatus());
         db.insert("orcamento",null,values);
         incluirItensOrcamento(orcamento.getListaItens());
     }
+    public void atualizarOrcamento(Orcamento orcamento){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idusuario",orcamento.getUsuario().getIdUsuario());
+        values.put("idvendedor",orcamento.getVendedor().getIdUsuario());
+        values.put("valorOrcamento",orcamento.getValorTotalOrcamento());
+        values.put("status",orcamento.getStatus());
+        db.update("orcamento",values,"idorcamento="+orcamento.getIdOrcamento(),null);
+        incluirItensOrcamento(orcamento.getListaItens());
+    }
     public List<Orcamento> getListaOrcamentos(){
-        String sql = "SELECT * FROM orcamento";
+        String sql = "SELECT * FROM orcamento ORDER BY idorcamento DESC LIMIT 30";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
 
         List<Orcamento> orcamentos = new ArrayList<>();
 
-        if(cursor != null && cursor.moveToFirst()){
+        if(cursor != null){
             while (cursor.moveToNext()){
                 Orcamento orcamento = new Orcamento();
+                orcamento.setListaItens(getItensOrcamento(cursor.getLong(0)));
                 orcamento.setIdOrcamento(cursor.getLong(0));
                 orcamento.setUsuario(getUsuario(cursor.getLong(1)));
                 orcamento.setVendedor(getUsuario(cursor.getLong(2)));
                 orcamento.setValorTotalOrcamento(cursor.getDouble(3));
+                orcamento.setStatus(cursor.getString(4));
                 orcamento.setListaItens(getItensOrcamento(cursor.getLong(0)));
                 orcamentos.add(orcamento);
             }
@@ -173,13 +271,28 @@ public class DBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         for (ItemOrcamento item : itens){
-            values.put("idorcamento",item.getOrcamento());
+            values.put("idorcamento",getUlitmoOrcamento());
             values.put("idproduto",item.getProduto().getIdProduto());
             values.put("preco",item.getPrecoUnitario());
             values.put("quantidade",item.getQuantidade());
             values.put("valorTotal",item.getValorTotalItem());
             db.insert("itemorcamento",null,values);
         }
+    }
+    public Endereco getEndereco(Long id){
+        String sql = "SELECT * FROM endereco WHERE idusuario= '"+id+"'";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+        Endereco endereco = new Endereco();
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            endereco.setIdEndereco(cursor.getLong(0));
+            endereco.setLogradouro(cursor.getString(1));
+            endereco.setEndereco(cursor.getString(2));
+            endereco.setNumero(cursor.getString(3));
+            endereco.setIdusuario(cursor.getLong(4));
+        }
+        return endereco;
     }
     public List<ItemOrcamento> getItensOrcamento(Long id){
         String sql = "SELECT * FROM itemorcamento where idorcamento= '"+id+"'";
@@ -188,7 +301,7 @@ public class DBManager {
 
         List<ItemOrcamento> itens = new ArrayList<>();
 
-        if(cursor != null && cursor.moveToFirst()){
+        if(cursor != null){
             while (cursor.moveToNext()){
                 ItemOrcamento item = new ItemOrcamento();
                 item.setIdItemOrcamento(cursor.getLong(0));

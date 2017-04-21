@@ -64,7 +64,7 @@ public class AdapterListView extends BaseAdapter {
         }
 
         itemHelper.descricao.setText(objeto.getTexto());
-        itemHelper.image.setImageResource(R.drawable.trolley);
+        itemHelper.image.setImageResource(objeto.getIconeRid());
 
         return arg1;
     }

@@ -23,6 +23,7 @@ import com.sgdfv.emerson.sgd_fv.model.ItemListView;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
+import com.sgdfv.emerson.sgd_fv.model.UrlConnection;
 import com.sgdfv.emerson.sgd_fv.util.AdapterListView;
 import com.sgdfv.emerson.sgd_fv.util.MascaraUtil;
 
@@ -92,7 +93,7 @@ public class ActivityEstoque extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Produto produtoSelecionado = listaProduto.get(((int) adapterListView.getItemId(position))-1);
-                new ProdutoAsyncTask().execute("http://192.168.1.3/php/buscarProduto.php?idproduto="+produtoSelecionado.getIdProduto());
+                new ProdutoAsyncTask().execute(UrlConnection.URL+"buscarProduto.php?idproduto="+produtoSelecionado.getIdProduto());
             }
         });
         etPesquisar.addTextChangedListener(new TextWatcher() {
@@ -181,6 +182,12 @@ public class ActivityEstoque extends AppCompatActivity {
             if(result.size() > 0){
                 Produto produto = result.get(0);
                 mostrarProduto(produto);
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        ActivityEstoque.this).setTitle("Atenção")
+                        .setMessage("Não foi possivel acessar o servidor...")
+                        .setPositiveButton("OK", null);
+                builder.create().show();
             }
         }
     }

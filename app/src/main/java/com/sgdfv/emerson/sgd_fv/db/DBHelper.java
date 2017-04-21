@@ -18,6 +18,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     "idusuario INTEGER PRIMARY KEY," +
                     "nome TEXT," +
                     "tipo TEXT)";
+    private static String TABLE_ENDERECO =
+            "CREATE TABLE endereco(" +
+                    "idendereco INTEGER PRIMARY KEY," +
+                    "logradouro TEXT," +
+                    "endereco TEXT," +
+                    "numero TEXT," +
+                    "idusuario INTEGER)";
+    private static String TABLE_CIDADE =
+            "CREATE TABLE cidade(" +
+                    "idcidade INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "codcidade TEXT," +
+                    "codigoestado TEXT," +
+                    "nome TEXT)";
     private static String TABLE_PRODUTO =
             "CREATE TABLE produto(" +
                     "idproduto INTEGER PRIMARY KEY," +
@@ -30,7 +43,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "idorcamento INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "idusuario INTEGER," +
                     "idvendedor INTEGER," +
-                    "valorOrcamento FLOAT)";
+                    "valorOrcamento FLOAT," +
+                    "status TEXT)";
     private static String TABLE_ITEMORCAMENTO = "" +
             "CREATE TABLE itemorcamento(" +
             "iditem INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -48,6 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_USUARIO);
+        db.execSQL(TABLE_ENDERECO);
+        db.execSQL(TABLE_CIDADE);
         db.execSQL(TABLE_PRODUTO);
         db.execSQL(TABLE_ORCAMENTO);
         db.execSQL(TABLE_ITEMORCAMENTO);

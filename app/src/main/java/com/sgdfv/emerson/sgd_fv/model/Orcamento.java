@@ -15,7 +15,9 @@ public class Orcamento implements Serializable{
     private Usuario vendedor;
     private Date dtEmissao;
     private double valorTotalOrcamento;
+    private String status;
     private List<ItemOrcamento> listaItens;
+    private Long idServidor;
 
     public Long getIdOrcamento() {
         return idOrcamento;
@@ -45,6 +47,14 @@ public class Orcamento implements Serializable{
         return dtEmissao;
     }
 
+    public Long getIdServidor() {
+        return idServidor;
+    }
+
+    public void setIdServidor(Long idServidor) {
+        this.idServidor = idServidor;
+    }
+
     public void setDtEmissao(Date dtEmissao) {
         this.dtEmissao = dtEmissao;
     }
@@ -55,6 +65,14 @@ public class Orcamento implements Serializable{
 
     public void setValorTotalOrcamento(double valorTotalOrcamento) {
         this.valorTotalOrcamento = valorTotalOrcamento;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<ItemOrcamento> getListaItens() {

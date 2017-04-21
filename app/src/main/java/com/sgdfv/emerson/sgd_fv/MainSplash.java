@@ -14,7 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sgdfv.emerson.sgd_fv.db.DBManager;
+import com.sgdfv.emerson.sgd_fv.model.Cidade;
+import com.sgdfv.emerson.sgd_fv.model.Endereco;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
+import com.sgdfv.emerson.sgd_fv.model.UrlConnection;
 import com.sgdfv.emerson.sgd_fv.model.Usuario;
 
 import org.apache.http.HttpEntity;
@@ -54,12 +57,12 @@ public class MainSplash extends AppCompatActivity {
         if (dbManager.getListaUsuarios().size() > 0) {
             Long id = dbManager.getUltimoUsuario().getIdUsuario();
             new UsuarioAsyncTask()
-                    .execute("http://192.168.1.3/php/usuarios.php?atualizar=" + id);
+                    .execute(UrlConnection.URL+"usuarios.php?atualizar=" + id);
         } else {
 
             UsuarioAsyncTask buscarUsuarios = new UsuarioAsyncTask();
             buscarUsuarios
-                    .execute("http://192.168.1.3/php/usuarios.php");
+                    .execute(UrlConnection.URL+"usuarios.php");
         }
     }
 
@@ -121,11 +124,158 @@ public class MainSplash extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Usuario> result) {
             super.onPostExecute(result);
+            if(result.size() > 0){
+                if(dbManager.getListaTodosProdutos().size() > 0){
+                    Long id = dbManager.getUlitmoEndereco().getIdEndereco();
+                    new EnderecoAsyncTask().execute(UrlConnection.URL+"enderecos.php?atualizar="+id);
+                }else{
+                    new EnderecoAsyncTask().execute(UrlConnection.URL+"enderecos.php");
+                }
+            }else {
+                if (dbManager.getListaTodosCidades().size() <= 0) {
+                    new CidadeAsyncTask().execute(UrlConnection.URL+"cidade.php");
+                }else{
+                    if(dbManager.getListaTodosProdutos().size() > 0){
+                        Long id = dbManager.getUlitmoProduto().getIdProduto();
+                        new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
+                    }else{
+                        new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+                    }
+                }
+            }
+        }
+    }
+    class CidadeAsyncTask extends AsyncTask<String, Void, List<Cidade>> {
+        @Override
+        protected List<Cidade> doInBackground(String... params) {
+            String urlString = params[0];
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpget = new HttpGet(urlString);
+            List<Cidade> cidades = new ArrayList<>();
+            try {
+                HttpResponse response = httpclient.execute(httpget);
+                HttpEntity entity = response.getEntity();
+
+                if (entity != null) {
+                    InputStream instream = entity.getContent();
+                    String json = getStringFromInputStream(instream);
+                    instream.close();
+
+                    cidades = getCidades(json);
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Falha ao acessar Web service", e);
+            }
+            return cidades;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            tvLoading.setText("Atualizando Cidade, Por Favor Aguarde... ");
+        }
+
+        private List<Cidade> getCidades(String jsonString) {
+
+            List<Cidade> cidades = new ArrayList<>();
+
+            try {
+                JSONArray locationLists = new JSONArray(jsonString);
+                JSONObject usuarioJson;
+                for (int i = 0; i < locationLists.length(); i++) {
+                    usuarioJson = new JSONObject(locationLists.getString(i));
+                    Log.i("TESTE", "id=" + usuarioJson.getString("codigocidade"));
+                    Cidade cidade = new Cidade();
+                    cidade.setIdCidade(usuarioJson.getString("codigocidade"));
+                    cidade.setNome(usuarioJson.getString("nome"));
+                    cidade.setCodigoestado(usuarioJson.getString("codigoestado"));
+                    dbManager.inserirCidade(cidade);
+                    cidades.add(cidade);
+                }
+            } catch (JSONException e) {
+                Log.e("Error", "Erro no parsing do JSON", e);
+            }
+            return cidades;
+        }
+
+        @Override
+        protected void onPostExecute(List<Cidade> result) {
+            super.onPostExecute(result);
             if(dbManager.getListaTodosProdutos().size() > 0){
                 Long id = dbManager.getUlitmoProduto().getIdProduto();
-                new ProdutoAsyncTask().execute("http://192.168.1.3/php/produtos.php?atualizar="+id);
+                new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
             }else{
-                new ProdutoAsyncTask().execute("http://192.168.1.3/php/produtos.php");
+                new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+            }
+
+        }
+    }
+    class EnderecoAsyncTask extends AsyncTask<String, Void, List<Endereco>> {
+        @Override
+        protected List<Endereco> doInBackground(String... params) {
+            String urlString = params[0];
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpget = new HttpGet(urlString);
+            List<Endereco> enderecos = new ArrayList<>();
+            try {
+                HttpResponse response = httpclient.execute(httpget);
+                HttpEntity entity = response.getEntity();
+
+                if (entity != null) {
+                    InputStream instream = entity.getContent();
+                    String json = getStringFromInputStream(instream);
+                    instream.close();
+                    enderecos = getEndereco(json);
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Falha ao acessar Web service", e);
+            }
+            return enderecos;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            tvLoading.setText("Atualizando Endereco, Por Favor Aguarde... ");
+        }
+
+        private List<Endereco> getEndereco(String jsonString) {
+
+            List<Endereco> enderecos = new ArrayList<>();
+
+            try {
+                JSONArray locationLists = new JSONArray(jsonString);
+                JSONObject usuarioJson;
+                for (int i = 0; i < locationLists.length(); i++) {
+                    usuarioJson = new JSONObject(locationLists.getString(i));
+                    Log.i("TESTE", "id=" + usuarioJson.getString("idendereco"));
+                    Endereco endereco = new Endereco();
+                    endereco.setIdEndereco(usuarioJson.getLong("idendereco"));
+                    endereco.setLogradouro(usuarioJson.getString("logradouro"));
+                    endereco.setEndereco(usuarioJson.getString("endereco"));
+                    endereco.setNumero(usuarioJson.getString("numero"));
+                    endereco.setIdusuario(usuarioJson.getLong("idusuario"));
+                    dbManager.inserirEndereco(endereco);
+                    enderecos.add(endereco);
+                }
+            } catch (JSONException e) {
+                Log.e("Error", "Erro no parsing do JSON", e);
+            }
+            return enderecos;
+        }
+
+        @Override
+        protected void onPostExecute(List<Endereco> result) {
+            super.onPostExecute(result);
+            if (dbManager.getListaTodosCidades().size() <= 0) {
+                new CidadeAsyncTask().execute(UrlConnection.URL+"cidade.php");
+            }else{
+                if(dbManager.getListaTodosProdutos().size() > 0){
+                    Long id = dbManager.getUlitmoProduto().getIdProduto();
+                    new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
+                }else{
+                    new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+                }
             }
 
         }

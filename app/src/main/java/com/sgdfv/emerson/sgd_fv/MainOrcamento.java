@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.sgdfv.emerson.sgd_fv.db.DBManager;
+import com.sgdfv.emerson.sgd_fv.model.Endereco;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Usuario;
 
@@ -109,7 +110,8 @@ public class MainOrcamento extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 usuarioSelecionado = (Usuario) parent.getItemAtPosition(position);
-               // etEndereco.setText(usuarioSelecionado.getEndereco());
+                Endereco endereco = dbManager.getEndereco(usuarioSelecionado.getIdUsuario());
+                etEndereco.setText(endereco.getLogradouro()+" "+endereco.getEndereco()+" "+endereco.getNumero());
             }
         });
         spVendedor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

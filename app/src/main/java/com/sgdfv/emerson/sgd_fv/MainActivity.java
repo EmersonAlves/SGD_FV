@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,MainUsuario.class);
                 startActivity(intent);
+                finish();
             }
         });
         btnHistoricoOrcamento.setOnClickListener(new View.OnClickListener() {
