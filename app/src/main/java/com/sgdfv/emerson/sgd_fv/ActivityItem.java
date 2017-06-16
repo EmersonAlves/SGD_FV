@@ -161,7 +161,7 @@ public class ActivityItem extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 produtoSelecionado = (Produto) parent.getItemAtPosition(position);
                 etUnidade.setText(produtoSelecionado.getUnidade());
-                etPreco.setText(MascaraUtil.setValorCampoMoeda(produtoSelecionado.getPreco()));
+                //etPreco.setText(MascaraUtil.setValorCampoMoeda(produtoSelecionado.getPreco()));
                 etPreco.requestFocus();
             }
         });

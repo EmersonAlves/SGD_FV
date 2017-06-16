@@ -97,16 +97,16 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/atDescricao"
                     android:layout_alignStart="@+id/atDescricao"
                     android:layout_below="@+id/atDescricao"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="14dp"
+                    android:layout_weight="0.44"
                     android:text="PREÇO"
-                    android:textColor="#000"
-                    android:layout_weight="0.80" />
+                    android:textColor="#000" />
 
                 <TextView
                     android:id="@+id/tvUnidade"
@@ -130,7 +130,7 @@
 
                 <com.sgdfv.emerson.sgd_fv.util.FieldMoney
                     android:id="@+id/etPreco"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/atDescricao"
                     android:layout_alignLeft="@+id/textView10"
@@ -147,7 +147,7 @@
 
                 <EditText
                     android:id="@+id/etUnidade"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
@@ -190,7 +190,7 @@
 
                 <EditText
                     android:id="@+id/etQuantidade"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/etPreco"
                     android:layout_alignLeft="@+id/textView11"
@@ -207,7 +207,7 @@
 
                 <com.sgdfv.emerson.sgd_fv.util.FieldMoney
                     android:id="@+id/etTotalItem"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/etPreco"
                     android:layout_alignLeft="@+id/textView11"

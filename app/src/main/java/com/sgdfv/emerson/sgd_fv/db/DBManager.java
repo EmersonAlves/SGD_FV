@@ -34,6 +34,7 @@ public class DBManager {
         values.put("idusuario",usuario.getIdUsuario());
         values.put("nome",usuario.getNome());
         values.put("tipo",usuario.getTipo());
+        values.put("nomefantasia",usuario.getNomeFantasia());
         db.insert("usuario",null,values);
     }
     public void inserirCidade(Cidade cidade){
@@ -67,6 +68,7 @@ public class DBManager {
                 usuario.setIdUsuario(cursor.getLong(0));
                 usuario.setNome(cursor.getString(1));
                 usuario.setTipo(cursor.getString(2));
+                usuario.setNomeFantasia(cursor.getString(3));
                 usuarios.add(usuario);
             }
         }
@@ -243,7 +245,6 @@ public class DBManager {
         values.put("valorOrcamento",orcamento.getValorTotalOrcamento());
         values.put("status",orcamento.getStatus());
         db.update("orcamento",values,"idorcamento="+orcamento.getIdOrcamento(),null);
-        incluirItensOrcamento(orcamento.getListaItens());
     }
     public List<Orcamento> getListaOrcamentos(){
         String sql = "SELECT * FROM orcamento ORDER BY idorcamento DESC LIMIT 30";

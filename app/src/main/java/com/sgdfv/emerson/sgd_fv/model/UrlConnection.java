@@ -5,5 +5,5 @@ package com.sgdfv.emerson.sgd_fv.model;
  */
 
 public class UrlConnection {
-    public static String URL = "http://192.168.15.16/php/";
+    public static String URL = "http://191.190.120.186:8090/php/";
 }

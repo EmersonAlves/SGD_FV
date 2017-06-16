@@ -34,7 +34,8 @@
             android:name=".ActivityItem"
             android:screenOrientation="portrait" />
         <activity android:name=".ActivityHistorico" />
-        <activity android:name=".ActivityEstoque"></activity>
+        <activity android:name=".ActivityEstoque" />
+        <activity android:name=".ActivityConsulta"></activity>
     </application>
 
 </manifest>

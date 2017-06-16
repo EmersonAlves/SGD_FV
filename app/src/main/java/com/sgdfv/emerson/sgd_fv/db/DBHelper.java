@@ -17,7 +17,8 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE usuario(" +
                     "idusuario INTEGER PRIMARY KEY," +
                     "nome TEXT," +
-                    "tipo TEXT)";
+                    "tipo TEXT," +
+                    "nomefantasia TEXT)";
     private static String TABLE_ENDERECO =
             "CREATE TABLE endereco(" +
                     "idendereco INTEGER PRIMARY KEY," +

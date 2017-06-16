@@ -2,8 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:gravity="center_horizontal"
     android:layout_height="fill_parent" android:layout_width="fill_parent">
-
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
@@ -20,22 +18,37 @@
         android:id="@+id/atNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textAutoComplete|textAutoCorrect"
         android:layout_below="@+id/textView5"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
         android:layout_alignLeft="@+id/textView5"
-        android:inputType="textCapCharacters"
+        android:layout_alignStart="@+id/textView5" />
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:text="NOME FANTASIA"
+        android:layout_below="@+id/atNome"
+        android:layout_alignLeft="@+id/textView5"
         android:layout_alignStart="@+id/textView5" />
 
+    <AutoCompleteTextView
+        android:id="@+id/atFantasia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textAutoComplete|textAutoCorrect"
+        android:layout_below="@+id/textView21"
+        android:layout_alignLeft="@+id/textView21"
+        android:layout_alignStart="@+id/textView21" />
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ENDERECO"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/atNome"
-        android:layout_alignLeft="@+id/atNome"
-        android:layout_alignStart="@+id/atNome" />
+        android:layout_below="@+id/atFantasia"
+        android:layout_alignLeft="@+id/atFantasia"
+        android:layout_alignStart="@+id/atFantasia"
+        android:layout_marginTop="17dp" />
 
     <EditText
         android:id="@+id/etEndereco"
@@ -44,32 +57,31 @@
         android:ems="10"
         android:focusable="false"
         android:inputType="textPostalAddress"
-        android:layout_marginTop="11dp"
         android:layout_below="@+id/textView6"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/textView6"
-        android:layout_alignStart="@+id/textView6"
-        android:layout_alignRight="@+id/atNome"
-        android:layout_alignEnd="@+id/atNome" />
+        android:layout_alignStart="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="VENDEDOR"
-        android:layout_marginTop="15dp"
         android:layout_below="@+id/etEndereco"
         android:layout_alignLeft="@+id/etEndereco"
-        android:layout_alignStart="@+id/etEndereco" />
+        android:layout_alignStart="@+id/etEndereco"
+        android:layout_marginTop="17dp" />
 
     <Spinner
         android:id="@+id/spVendedor"
         style="@android:style/Widget.Holo.Light.Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:spinnerMode="dialog"
         android:layout_below="@+id/textView7"
-        android:layout_marginTop="11dp" />
+        android:layout_alignLeft="@+id/textView7"
+        android:layout_alignStart="@+id/textView7" />
 
     <LinearLayout
         android:id="@+id/rodape"

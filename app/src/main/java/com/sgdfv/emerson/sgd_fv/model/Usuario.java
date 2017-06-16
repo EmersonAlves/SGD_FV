@@ -15,6 +15,7 @@ public class Usuario implements Serializable {
     private Endereco endereco;
     private String url;
     private Long idServidor;
+    private String nomeFantasia;
 
 
     public Long getIdUsuario() {
@@ -79,6 +80,14 @@ public class Usuario implements Serializable {
 
     public void setIdServidor(Long idServidor) {
         this.idServidor = idServidor;
+    }
+
+    public String getNomeFantasia() {
+        return nomeFantasia;
+    }
+
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
     }
 
     public String toString(){

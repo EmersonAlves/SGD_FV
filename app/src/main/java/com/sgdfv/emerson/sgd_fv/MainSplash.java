@@ -3,6 +3,7 @@ package com.sgdfv.emerson.sgd_fv;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +45,8 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainSplash extends AppCompatActivity {
     private DBManager dbManager;
     private TextView tvLoading;
+    private ProgressBar progressBar;
+    private List<Usuario> usuarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,7 @@ public class MainSplash extends AppCompatActivity {
         dbManager = new DBManager(this);
 
         tvLoading = (TextView) findViewById(R.id.tvCarregamento);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         if (dbManager.getListaUsuarios().size() > 0) {
             Long id = dbManager.getUltimoUsuario().getIdUsuario();
@@ -86,6 +91,9 @@ public class MainSplash extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 Log.e("Error", "Falha ao acessar Web service", e);
+                Intent intent = new Intent(MainSplash.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
             return usuarios;
         }
@@ -96,29 +104,30 @@ public class MainSplash extends AppCompatActivity {
             tvLoading.setText("Atualizando Clientes, Por Favor Aguarde... ");
         }
 
-        private List<Usuario> getUsuario(String jsonString) {
+        private List<Usuario> getUsuario(final String jsonString) {
 
-            List<Usuario> usuarios = new ArrayList<>();
-
+            usuarios = new ArrayList<>();
             try {
                 JSONArray locationLists = new JSONArray(jsonString);
                 JSONObject usuarioJson;
+                progressBar.setMax(locationLists.length());
+                progressBar.setProgress(0);
                 for (int i = 0; i < locationLists.length(); i++) {
                     usuarioJson = new JSONObject(locationLists.getString(i));
-                    Log.i("TESTE", "id=" + usuarioJson.getString("idusuario"));
+                    Log.i("Cliente", "id=" + usuarioJson.getString("idusuario"));
                     Usuario usuario = new Usuario();
                     usuario.setIdUsuario(usuarioJson.getLong("idusuario"));
                     usuario.setTipo(usuarioJson.getString("tipo"));
                     usuario.setNome(usuarioJson.getString("nome"));
+                    usuario.setNomeFantasia(usuarioJson.getString("nomefantasia"));
                     dbManager.inserirUsuario(usuario);
                     usuarios.add(usuario);
+                    progressBar.setProgress(i);
                 }
             } catch (JSONException e) {
                 Log.e("Error", "Erro no parsing do JSON", e);
             }
-
             return usuarios;
-
         }
 
         @Override
@@ -182,15 +191,18 @@ public class MainSplash extends AppCompatActivity {
             try {
                 JSONArray locationLists = new JSONArray(jsonString);
                 JSONObject usuarioJson;
+                progressBar.setMax(locationLists.length());
+                progressBar.setProgress(0);
                 for (int i = 0; i < locationLists.length(); i++) {
                     usuarioJson = new JSONObject(locationLists.getString(i));
-                    Log.i("TESTE", "id=" + usuarioJson.getString("codigocidade"));
+                    Log.i("Cidade", "id=" + usuarioJson.getString("codigocidade"));
                     Cidade cidade = new Cidade();
                     cidade.setIdCidade(usuarioJson.getString("codigocidade"));
                     cidade.setNome(usuarioJson.getString("nome"));
                     cidade.setCodigoestado(usuarioJson.getString("codigoestado"));
                     dbManager.inserirCidade(cidade);
                     cidades.add(cidade);
+                    progressBar.setProgress(i);
                 }
             } catch (JSONException e) {
                 Log.e("Error", "Erro no parsing do JSON", e);
@@ -246,9 +258,11 @@ public class MainSplash extends AppCompatActivity {
             try {
                 JSONArray locationLists = new JSONArray(jsonString);
                 JSONObject usuarioJson;
+                progressBar.setMax(locationLists.length());
+                progressBar.setProgress(0);
                 for (int i = 0; i < locationLists.length(); i++) {
                     usuarioJson = new JSONObject(locationLists.getString(i));
-                    Log.i("TESTE", "id=" + usuarioJson.getString("idendereco"));
+                    Log.i("Endereco", "id=" + usuarioJson.getString("idendereco"));
                     Endereco endereco = new Endereco();
                     endereco.setIdEndereco(usuarioJson.getLong("idendereco"));
                     endereco.setLogradouro(usuarioJson.getString("logradouro"));
@@ -257,6 +271,7 @@ public class MainSplash extends AppCompatActivity {
                     endereco.setIdusuario(usuarioJson.getLong("idusuario"));
                     dbManager.inserirEndereco(endereco);
                     enderecos.add(endereco);
+                    progressBar.setProgress(i);
                 }
             } catch (JSONException e) {
                 Log.e("Error", "Erro no parsing do JSON", e);
@@ -319,10 +334,12 @@ public class MainSplash extends AppCompatActivity {
             try {
                 JSONArray locationLists = new JSONArray(jsonString);
                 JSONObject produtoJson;
+                progressBar.setMax(locationLists.length());
+                progressBar.setProgress(0);
                 for (int i = 0; i < locationLists.length(); i++) {
                     produtoJson = new JSONObject(locationLists.getString(i));
 
-                    Log.i("TESTE", "id=" + produtoJson.getString("idproduto"));
+                    Log.i("Produto", "id=" + produtoJson.getString("idproduto"));
 
                     Produto produto = new Produto();
                     produto.setIdProduto(produtoJson.getLong("idproduto"));
@@ -331,6 +348,7 @@ public class MainSplash extends AppCompatActivity {
                     produto.setPreco(produtoJson.getDouble("preco"));
                     dbManager.inserirProduto(produto);
                     produtos.add(produto);
+                    progressBar.setProgress(i);
                 }
             } catch (JSONException e) {
                 Log.e("Error", "Erro no parsing do JSON", e);

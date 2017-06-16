@@ -3,6 +3,7 @@ package com.sgdfv.emerson.sgd_fv;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,7 @@ import com.sgdfv.emerson.sgd_fv.model.ItemListView;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
+import com.sgdfv.emerson.sgd_fv.model.UrlConnection;
 import com.sgdfv.emerson.sgd_fv.model.Usuario;
 import com.sgdfv.emerson.sgd_fv.util.AdapterListView;
 import com.sgdfv.emerson.sgd_fv.util.MascaraUtil;
@@ -119,7 +121,7 @@ public class ActivityHistorico extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Orcamento orcamento = orcamentos.get(((int) adapterListView.getItemId(position))-1);
-                if(orcamento.getStatus().equals("NAO ENVIADO")) {
+                if(!orcamento.getStatus().equals("CANCELADO")) {
                     CancelarOrcamento(orcamento);
                 }
             }
@@ -144,7 +146,7 @@ public class ActivityHistorico extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EnviarOrcamento enviarOrcamento = new EnviarOrcamento();
-                enviarOrcamento.setUrl("http://192.168.1.3/php/orcamentos.php");
+                enviarOrcamento.setUrl(UrlConnection.URL+"orcamentos.php");
                 List<Orcamento> listaEnvio = new ArrayList<Orcamento>();
                 for(Orcamento orc : orcamentos){
                     if(orc.getStatus().equals("NAO ENVIADO")){
@@ -259,27 +261,45 @@ public class ActivityHistorico extends AppCompatActivity {
     }
     public void CancelarOrcamento(final Orcamento orcamento){
         //Cria o gerador do AlertDialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //define o titulo
-        builder.setTitle(orcamento.getUsuario().getNome());
-        //define a mensagem
-        builder.setMessage("Deseja cancelar orcamento ?");
-        //define um botão como positivo
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                Orcamento orca = orcamento;
-                orca.setStatus("CANCELADO");
-                dbManager.atualizarOrcamento(orca);
-                createListView();
-                alerta.dismiss();
-            }
-        });
-        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ActivityHistorico.this, android.R.layout.select_dialog_item);
+        arrayAdapter.add("CONSULTAR");
+        if(orcamento.getStatus().equals("NAO ENVIADO")) {
+            arrayAdapter.add("CANCELAR");
+        }
+
+        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                alerta.dismiss();
+                String nome = arrayAdapter.getItem(which);
+                if(nome.equals("CONSULTAR")){
+                    Intent intent = new Intent(ActivityHistorico.this,ActivityConsulta.class);
+                    intent.putExtra("orcamento",orcamento);
+                    startActivity(intent);
+                }else{
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ActivityHistorico.this);
+                    builder1.setMessage("Deseja cancelar orcamento ?");
+                    builder1.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            Orcamento orca = orcamento;
+                            orca.setStatus("CANCELADO");
+                            dbManager.atualizarOrcamento(orca);
+                            createListView();
+                            alerta.dismiss();
+                        }
+                    });
+                    builder1.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alerta.dismiss();
+                        }
+                    });
+                    builder1.show();
+                }
             }
         });
+       // builder.setTitle(orcamento.getUsuario().getNome());
         //cria o AlertDialog
         alerta = builder.create();
         //Exibe
