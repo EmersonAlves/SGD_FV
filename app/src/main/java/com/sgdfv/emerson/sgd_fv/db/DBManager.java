@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.sgdfv.emerson.sgd_fv.model.Cidade;
 import com.sgdfv.emerson.sgd_fv.model.Endereco;
+import com.sgdfv.emerson.sgd_fv.model.Ip;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
@@ -110,6 +111,14 @@ public class DBManager {
         values.put("unidade",produto.getUnidade());
         db.insert("produto",null,values);
     }
+    public void inserirIp(Ip ip){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idip",ip.getIdIp());
+        values.put("ip",ip.getIp());
+        db.insert("tip",null,values);
+    }
+
     public List<Produto> getListaTodosProdutos(){
         String sql = "SELECT * FROM produto ORDER BY descricao";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -148,6 +157,32 @@ public class DBManager {
         }
         return cidades;
     }
+    public List<Ip> getListaIp(){
+        String sql = "SELECT * FROM tip ORDER BY idip";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        List<Ip> ips = new ArrayList<>();
+
+        if(cursor != null){
+            while (cursor.moveToNext()){
+                Ip ip = new Ip();
+
+                ip.setIdIp(cursor.getLong(0));
+                ip.setIp(cursor.getString(1));
+                ips.add(ip);
+            }
+        }
+        return ips;
+    }
+
+    public void deleta(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db.rawQuery("DELETE FROM usuario",null);
+        db.rawQuery("DELETE FROM produto",null);
+        db.rawQuery("DELETE FROM endereco",null);
+    }
+
     public Produto getProduto(Long id){
         String sql = "SELECT * FROM produto where idproduto = '"+id+"'";
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -245,6 +280,13 @@ public class DBManager {
         values.put("valorOrcamento",orcamento.getValorTotalOrcamento());
         values.put("status",orcamento.getStatus());
         db.update("orcamento",values,"idorcamento="+orcamento.getIdOrcamento(),null);
+        deleteItem(orcamento);
+    }
+    public void atualizarIp(Ip ip){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("ip",ip.getIp());
+        db.update("tip",values,"idip="+ip.getIdIp(),null);
     }
     public List<Orcamento> getListaOrcamentos(){
         String sql = "SELECT * FROM orcamento ORDER BY idorcamento DESC LIMIT 30";
@@ -268,6 +310,25 @@ public class DBManager {
         }
         return orcamentos;
     }
+    public void deleteItem(Orcamento orcamento){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete("itemorcamento","idorcamento="+orcamento.getIdOrcamento(),null);
+        atualizaItensOrcamento(orcamento.getListaItens(),orcamento);
+    }
+    public void atualizaItensOrcamento(List<ItemOrcamento> itens,Orcamento orcamento){
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for (ItemOrcamento item : itens){
+            values.put("idorcamento",orcamento.getIdOrcamento());
+            values.put("idproduto",item.getProduto().getIdProduto());
+            values.put("preco",item.getPrecoUnitario());
+            values.put("quantidade",item.getQuantidade());
+            values.put("valorTotal",item.getValorTotalItem());
+            db.insert("itemorcamento",null,values);
+        }
+    }
+
     public void incluirItensOrcamento(List<ItemOrcamento> itens){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

@@ -63,6 +63,7 @@ public class ActivityHistorico extends AppCompatActivity {
     private List<Orcamento> orcamentos;
     private Button btnEnviar;
     private  AlertDialog alerta;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class ActivityHistorico extends AppCompatActivity {
 
         lvOrcamentos = (ListView) findViewById(R.id.lvOrcamentos);
         createListView();
+        url = "http://"+dbManager.getListaIp().get(0).getIp()+":8090/php/";
     }
 
     private void createListView() {
@@ -146,7 +148,7 @@ public class ActivityHistorico extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EnviarOrcamento enviarOrcamento = new EnviarOrcamento();
-                enviarOrcamento.setUrl(UrlConnection.URL+"orcamentos.php");
+                enviarOrcamento.setUrl(url+"orcamentos.php");
                 List<Orcamento> listaEnvio = new ArrayList<Orcamento>();
                 for(Orcamento orc : orcamentos){
                     if(orc.getStatus().equals("NAO ENVIADO")){
@@ -304,5 +306,11 @@ public class ActivityHistorico extends AppCompatActivity {
         alerta = builder.create();
         //Exibe
         alerta.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createListView();
     }
 }

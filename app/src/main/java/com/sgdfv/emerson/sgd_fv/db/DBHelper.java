@@ -55,6 +55,11 @@ public class DBHelper extends SQLiteOpenHelper {
             "quantidade FLOAT," +
             "valorTotal FLOAT)";
 
+    private static String TABLE_IP =
+            "CREATE TABLE tip(" +
+                    "idip INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ip TEXT)";
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
 
@@ -68,6 +73,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_PRODUTO);
         db.execSQL(TABLE_ORCAMENTO);
         db.execSQL(TABLE_ITEMORCAMENTO);
+        db.execSQL(TABLE_IP);
     }
 
     @Override

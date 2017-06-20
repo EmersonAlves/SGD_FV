@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".MainSplash"
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             android:name=".MainOrcamento"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MainSplash"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainUsuario"
@@ -35,7 +35,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ActivityHistorico" />
         <activity android:name=".ActivityEstoque" />
-        <activity android:name=".ActivityConsulta"></activity>
+        <activity android:name=".ActivityConsulta" />
+        <activity android:name=".ActivityIP" />
+        <activity android:name=".ActivityAlteraItens"></activity>
     </application>
 
 </manifest>

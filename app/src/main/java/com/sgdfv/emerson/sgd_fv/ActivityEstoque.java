@@ -51,6 +51,7 @@ public class ActivityEstoque extends AppCompatActivity {
     private ArrayList<ItemListView> itens;
     private List<Produto> listaProduto;
     private EditText etPesquisar;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,9 @@ public class ActivityEstoque extends AppCompatActivity {
         dbManager = new DBManager(this);
 
         listaProduto = dbManager.getListaTodosProdutos();
+        url = "http://"+dbManager.getListaIp().get(0).getIp()+":8090/php/";
         if (listaProduto.size() > 0) {
             createListView();
-
         }
     }
     private void createListView() {
@@ -93,7 +94,7 @@ public class ActivityEstoque extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Produto produtoSelecionado = listaProduto.get(((int) adapterListView.getItemId(position))-1);
-                new ProdutoAsyncTask().execute(UrlConnection.URL+"buscarProduto.php?idproduto="+produtoSelecionado.getIdProduto());
+                new ProdutoAsyncTask().execute(url+"buscarProduto.php?idproduto="+produtoSelecionado.getIdProduto());
             }
         });
         etPesquisar.addTextChangedListener(new TextWatcher() {

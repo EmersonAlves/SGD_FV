@@ -60,7 +60,11 @@ public class MainUsuario extends AppCompatActivity {
     private EditText etNumero;
     private EditText etBairro;
     private EditText etComplemento;
+    private EditText etNomeFantasia;
     private Cidade cidade;
+    private String url;
+    private Spinner spVendedor;
+    private Usuario vendedor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class MainUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_usuario);
 
         etNome = (EditText) findViewById(R.id.etNome);
+        etNomeFantasia = (EditText) findViewById(R.id.etNomeFantasia);
         etCnpfCpf = (EditText) findViewById(R.id.etCnpfCpf);
         etFone = (EditText) findViewById(R.id.etFone);
         etEndereco = (EditText) findViewById(R.id.etEndereco);
@@ -76,16 +81,16 @@ public class MainUsuario extends AppCompatActivity {
         etComplemento = (EditText) findViewById(R.id.etComplemento);
         atCidade = (AutoCompleteTextView) findViewById(R.id.atCidade);
         spLogradouro = (Spinner) findViewById(R.id.spLogradouro);
+        spVendedor = (Spinner) findViewById(R.id.spVendedor);
         btnSalvar = (Button) findViewById(R.id.btnSalvar);
         dbManager = new DBManager(this);
 
         etFone.addTextChangedListener(Mask.insert(Mask.CELULAR_MASK, etFone));
-
+        url = "http://"+dbManager.getListaIp().get(0).getIp()+":8090/php/";
         popularComponents();
         actionEvent();
 
     }
-
     public void popularComponents() {
         if (dbManager.getListaTodosCidades().size() > 0) {
             List<Cidade> cidades = dbManager.getListaTodosCidades();
@@ -107,6 +112,15 @@ public class MainUsuario extends AppCompatActivity {
         logradouros.add("DISTRITO");
         ArrayAdapter<String> apadterLogradouro = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, logradouros);
         spLogradouro.setAdapter(apadterLogradouro);
+        List<Usuario> vendedor = new ArrayList<>();
+        for(Usuario usuario : dbManager.getListaUsuarios()){
+            if (usuario.getTipo().equals("FUNCIONARIO")) {
+                vendedor.add(usuario);
+            }
+        }
+        ArrayAdapter<Usuario> apadterVendedor = new ArrayAdapter<Usuario>(this, android.R.layout.simple_dropdown_item_1line, vendedor);
+
+        spVendedor.setAdapter(apadterVendedor);
     }
 
     public void actionEvent() {
@@ -115,6 +129,17 @@ public class MainUsuario extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cidade = (Cidade) parent.getItemAtPosition(position);
                 etBairro.requestFocus();
+            }
+        });
+        spVendedor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                vendedor = (Usuario) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         btnSalvar.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +164,7 @@ public class MainUsuario extends AppCompatActivity {
                     return;
                 }
                 usuario.setNome(etNome.getText().toString());
+                usuario.setNomeFantasia(etNomeFantasia.getText().toString());
                 usuario.setCpfcnpj(etCnpfCpf.getText().toString());
                 usuario.setFone(etFone.getText().toString());
 
@@ -153,10 +179,8 @@ public class MainUsuario extends AppCompatActivity {
                 endereco.setBairro(etBairro.getText().toString());
 
                 usuario.setEndereco(endereco);
-                usuario.setUrl(UrlConnection.URL+"salvarUsuario.php");
+                usuario.setUrl(url+"salvarUsuario.php");
                 new UsuarioAsyncTask().execute(usuario);
-
-
             }
         });
     }
@@ -178,8 +202,10 @@ public class MainUsuario extends AppCompatActivity {
                 JSONObject obj = new JSONObject();
                 JSONArray ja = new JSONArray();
                 obj.put("nome", usuario.getNome());
+                obj.put("nomefantasia", usuario.getNomeFantasia());
                 obj.put("cpfcnpj", usuario.getCpfcnpj());
                 obj.put("fone", usuario.getFone());
+                obj.put("vendedor", vendedor.getIdUsuario());
 
                 obj.put("bairro", usuario.getEndereco().getBairro());
                 obj.put("complemento",usuario.getEndereco().getComplemento());
@@ -266,7 +292,5 @@ public class MainUsuario extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(MainUsuario.this,MainActivity.class);
-        startActivity(intent);
     }
 }

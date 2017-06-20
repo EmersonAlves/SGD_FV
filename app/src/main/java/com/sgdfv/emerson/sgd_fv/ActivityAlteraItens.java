@@ -25,7 +25,6 @@ import com.sgdfv.emerson.sgd_fv.model.EnviarOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.ItemOrcamento;
 import com.sgdfv.emerson.sgd_fv.model.Orcamento;
 import com.sgdfv.emerson.sgd_fv.model.Produto;
-import com.sgdfv.emerson.sgd_fv.model.UrlConnection;
 import com.sgdfv.emerson.sgd_fv.util.MascaraUtil;
 import com.sgdfv.emerson.sgd_fv.util.Utility;
 
@@ -48,7 +47,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityItem extends AppCompatActivity {
+public class ActivityAlteraItens extends AppCompatActivity {
     private AutoCompleteTextView atDescricao;
     private ListView listaItens;
     private Button btnItem;
@@ -66,13 +65,12 @@ public class ActivityItem extends AppCompatActivity {
     private Orcamento orcamento;
     private Produto produtoSelecionado;
     private String url;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
+        setContentView(R.layout.activity_altera_itens);
 
-        orcamento = (Orcamento) getIntent().getSerializableExtra("orcamento");
+        orcamento =  (Orcamento) getIntent().getSerializableExtra("orcamento");
         itens = new ArrayList<>();
 
         atDescricao = (AutoCompleteTextView) findViewById(R.id.atDescricao);
@@ -91,15 +89,19 @@ public class ActivityItem extends AppCompatActivity {
         dbManager = new DBManager(this);
 
         etPreco.setText("0.00");
-        etTotal.setText("0.00");
+        etTotal.setText(MascaraUtil.setValorCampoMoeda(orcamento.getValorTotalOrcamento()));
         etTotalItem.setText("0.00");
         etUnidade.setText("");
-
         popularProduto();
         atDescricao.requestFocus();
         actionEvent();
         url = "http://"+dbManager.getListaIp().get(0).getIp()+":8090/php/";
+
+        itens = orcamento.getListaItens();
+        atualizarItens();
+
     }
+
 
     public void popularProduto() {
         List<Produto> produtos = new ArrayList<>();
@@ -127,7 +129,7 @@ public class ActivityItem extends AppCompatActivity {
                 }else {
                     if(itens.size() > 0) {
                         for (ItemOrcamento item : itens) {
-                            if(item.getProduto().equals(produtoSelecionado)){
+                            if(item.getProduto().getIdProduto().equals(produtoSelecionado.getIdProduto())){
                                 item.setIdItemOrcamento(produtoSelecionado.getIdProduto());
                                 item.setPrecoUnitario(MascaraUtil.recuperarValorCampoMoeda(etPreco.getText().toString()));
                                 item.setQuantidade(Double.parseDouble(etQuantidade.getText().toString()));
@@ -146,9 +148,9 @@ public class ActivityItem extends AppCompatActivity {
                     item.setProduto(produtoSelecionado);
                     itens.add(item);
                     atualizarItens();
-                    if(listaItens.getCount() > 1){
-                        Utility.setListViewHeightBasedOnChildren(listaItens);
-                    }
+                    //if(listaItens.getCount() > 1){
+                    //   Utility.setListViewHeightBasedOnChildren(listaItens);
+                   // }
                 }
             }
         });
@@ -224,6 +226,9 @@ public class ActivityItem extends AppCompatActivity {
         etTotal.setText(MascaraUtil.setValorCampoMoeda(total));
         limparCampos();
         atDescricao.requestFocus();
+        if(listaItens.getCount() > 1){
+            Utility.setListViewHeightBasedOnChildren(listaItens);
+        }
     }
 
     private void dialogItem(final int position) {
@@ -266,14 +271,14 @@ public class ActivityItem extends AppCompatActivity {
 
     public void finalizarOrcamento(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Finalizar Orcamento");
+        builder.setTitle("Finalizar Alteração Orcamento");
         builder.setMessage("Deseja finalizar orcamento ?");
         builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 orcamento.setListaItens(itens);
                 orcamento.setValorTotalOrcamento(MascaraUtil.recuperarValorCampoMoeda(etTotal.getText().toString()));
                 orcamento.setStatus("NAO ENVIADO");
-                dbManager.inserirOrcamento(orcamento);
+                dbManager.atualizarOrcamento(orcamento);
                 alerta.dismiss();
                 enviarOrcamento();
             }
@@ -310,7 +315,7 @@ public class ActivityItem extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Cancelar Orcamento");
+        builder.setTitle("Cancelar Alterações do Orcamento");
         builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 alerta.dismiss();
@@ -375,7 +380,7 @@ public class ActivityItem extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = ProgressDialog.show(ActivityItem.this, "Aguarde",
+            dialog = ProgressDialog.show(ActivityAlteraItens.this, "Aguarde",
                     "Enviado Orcamentos, Por Favor Aguarde...");
         }
         @Override
@@ -389,7 +394,7 @@ public class ActivityItem extends AppCompatActivity {
                 finish();
             }else{
                 AlertDialog.Builder builder = new AlertDialog.Builder(
-                        ActivityItem.this).setTitle("Atenção")
+                        ActivityAlteraItens.this).setTitle("Atenção")
                         .setMessage("Não foi possivel enviar o orcamento...")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -433,6 +438,6 @@ public class ActivityItem extends AppCompatActivity {
         EnviarOrcamento enviarOrcamento = new EnviarOrcamento();
         enviarOrcamento.setUrl(url+"orcamento.php");
         enviarOrcamento.setOrcamento(orcamento);
-        new OrcamentoAsyncTask().execute(enviarOrcamento);
+        new ActivityAlteraItens.OrcamentoAsyncTask().execute(enviarOrcamento);
     }
 }

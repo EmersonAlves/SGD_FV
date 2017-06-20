@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="127dp"
         app:srcCompat="@drawable/fvicon"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="11dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -65,7 +65,8 @@
         android:layout_below="@+id/linearLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:id="@+id/linearLayout3">
 
         <Button
             android:id="@+id/btnEstoque"
@@ -95,6 +96,49 @@
             android:drawableTop="@drawable/historico"
             android:text="HISTORICO DE ORCAMENTOS"
             android:textColor="@android:color/background_light" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/btnIp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/btnListaOrcamentos"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:background="#ef9102"
+            android:drawableTop="@drawable/icon"
+            android:elevation="0dp"
+            android:text="IP"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btnAtualiza"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/btnUsuario"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:background="#ef9102"
+            android:drawableTop="@drawable/update"
+            android:text="ATUALIZAR DADOS"
+            android:textColor="@android:color/background_light" />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -47,6 +47,7 @@ public class MainSplash extends AppCompatActivity {
     private TextView tvLoading;
     private ProgressBar progressBar;
     private List<Usuario> usuarios;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +60,16 @@ public class MainSplash extends AppCompatActivity {
         tvLoading = (TextView) findViewById(R.id.tvCarregamento);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        url = "http://"+dbManager.getListaIp().get(0).getIp()+":8090/php/";
         if (dbManager.getListaUsuarios().size() > 0) {
             Long id = dbManager.getUltimoUsuario().getIdUsuario();
             new UsuarioAsyncTask()
-                    .execute(UrlConnection.URL+"usuarios.php?atualizar=" + id);
+                    .execute(url+"usuarios.php?atualizar=" + id);
         } else {
 
             UsuarioAsyncTask buscarUsuarios = new UsuarioAsyncTask();
             buscarUsuarios
-                    .execute(UrlConnection.URL+"usuarios.php");
+                    .execute(url+"usuarios.php");
         }
     }
 
@@ -91,9 +93,6 @@ public class MainSplash extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 Log.e("Error", "Falha ao acessar Web service", e);
-                Intent intent = new Intent(MainSplash.this,MainActivity.class);
-                startActivity(intent);
-                finish();
             }
             return usuarios;
         }
@@ -136,19 +135,19 @@ public class MainSplash extends AppCompatActivity {
             if(result.size() > 0){
                 if(dbManager.getListaTodosProdutos().size() > 0){
                     Long id = dbManager.getUlitmoEndereco().getIdEndereco();
-                    new EnderecoAsyncTask().execute(UrlConnection.URL+"enderecos.php?atualizar="+id);
+                    new EnderecoAsyncTask().execute(url+"enderecos.php?atualizar="+id);
                 }else{
-                    new EnderecoAsyncTask().execute(UrlConnection.URL+"enderecos.php");
+                    new EnderecoAsyncTask().execute(url+"enderecos.php");
                 }
             }else {
                 if (dbManager.getListaTodosCidades().size() <= 0) {
-                    new CidadeAsyncTask().execute(UrlConnection.URL+"cidade.php");
+                    new CidadeAsyncTask().execute(url+"cidade.php");
                 }else{
                     if(dbManager.getListaTodosProdutos().size() > 0){
                         Long id = dbManager.getUlitmoProduto().getIdProduto();
-                        new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
+                        new ProdutoAsyncTask().execute(url+"produtos.php?atualizar="+id);
                     }else{
-                        new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+                        new ProdutoAsyncTask().execute(url+"produtos.php");
                     }
                 }
             }
@@ -215,9 +214,9 @@ public class MainSplash extends AppCompatActivity {
             super.onPostExecute(result);
             if(dbManager.getListaTodosProdutos().size() > 0){
                 Long id = dbManager.getUlitmoProduto().getIdProduto();
-                new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
+                new ProdutoAsyncTask().execute(url+"produtos.php?atualizar="+id);
             }else{
-                new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+                new ProdutoAsyncTask().execute(url+"produtos.php");
             }
 
         }
@@ -283,13 +282,13 @@ public class MainSplash extends AppCompatActivity {
         protected void onPostExecute(List<Endereco> result) {
             super.onPostExecute(result);
             if (dbManager.getListaTodosCidades().size() <= 0) {
-                new CidadeAsyncTask().execute(UrlConnection.URL+"cidade.php");
+                new CidadeAsyncTask().execute(url+"cidade.php");
             }else{
                 if(dbManager.getListaTodosProdutos().size() > 0){
                     Long id = dbManager.getUlitmoProduto().getIdProduto();
-                    new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php?atualizar="+id);
+                    new ProdutoAsyncTask().execute(url+"produtos.php?atualizar="+id);
                 }else{
-                    new ProdutoAsyncTask().execute(UrlConnection.URL+"produtos.php");
+                    new ProdutoAsyncTask().execute(url+"produtos.php");
                 }
             }
 
@@ -361,8 +360,8 @@ public class MainSplash extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Produto> result) {
             super.onPostExecute(result);
-            Intent intent = new Intent(MainSplash.this, MainActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(MainSplash.this, MainActivity.class);
+            //startActivity(intent);
             finish();
         }
     }
@@ -374,5 +373,10 @@ public class MainSplash extends AppCompatActivity {
         StringWriter writer = new StringWriter();
         while (-1 != (n = reader.read(buffer))) writer.write(buffer, 0, n);
         return writer.toString();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }
